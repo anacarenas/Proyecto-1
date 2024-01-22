@@ -1,0 +1,1201 @@
+openapi: 3.0.3
+info:
+  title: Servicio de Gestión Bancaria
+  description: El proyecto gestiona información de clientes, productos financieros, y transacciones, abarcando cuentas bancarias, créditos y tarjetas.
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: anacarenasr@sgmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Servidor de desarrollo
+tags:
+  - name: customer
+    description: Operaciones relacionadas con clientes (Person y Company)
+  - name: account
+    description: Operaciones relacionadas con cuentas
+  - name: credits
+    description: Operaciones relacionadas con créditos (Credit y CreditCard)
+  - name: transaction
+    description: Operaciones relacionadas con transacciones
+
+paths:
+  /person:
+    get:
+      tags:
+        - customer
+      summary: Obtener lista de personas (Person)
+      description: Retorna una lista de todas las personas registradas.
+      responses:
+        '200':
+          description: Lista de personas obtenida exitosamente
+          content:
+            application/json:
+              example:
+                - id: 1
+                  name: Juan
+                  lastName: Perez
+                  dni: 123456789
+                  email: juan@domain.com
+                  telephone: 123456789
+                  typeCustomer: individual
+                  typeProfile: standard
+                - id: 2
+                  name: Maria
+                  lastName: Lopez
+                  dni: 987654321
+                  email: maria@domain.com
+                  telephone: 987654321
+                  typeCustomer: individual
+                  typeProfile: premium
+    post:
+      tags:
+        - customer
+      summary: Crear una nueva persona (Person)
+      description: Permite registrar una nueva persona en el sistema.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Person'
+      responses:
+        '201':
+          description: Persona creada exitosamente
+        '400':
+          description: Solicitud incorrecta
+          content:
+            application/json:
+              example:
+                message: Error de validación en la solicitud
+
+  /person/{id}:
+    get:
+      tags:
+        - customer
+      summary: Obtener detalles de una persona (Person) por ID
+      description: Retorna los detalles de una persona específica según su ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Detalles de la persona obtenidos exitosamente
+          content:
+            application/json:
+              example:
+                id: 1
+                name: Juan
+                lastName: Perez
+                dni: 123456789
+                email: juan@domain.com
+                telephone: 123456789
+                typeCustomer: individual
+                typeProfile: standard
+        '404':
+          description: Persona no encontrada
+          content:
+            application/json:
+              example:
+                message: Persona no encontrada
+
+    put:
+      tags:
+        - customer
+      summary: Actualizar una persona (Person) existente
+      description: Permite actualizar los detalles de una persona existente.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Person'
+      responses:
+        '200':
+          description: Persona actualizada exitosamente
+        '400':
+          description: Solicitud incorrecta
+          content:
+            application/json:
+              example:
+                message: Error de validación en la solicitud
+        '404':
+          description: Persona no encontrada
+          content:
+            application/json:
+              example:
+                message: Persona no encontrada
+
+    delete:
+      tags:
+        - customer
+      summary: Eliminar una persona (Person)
+      description: Permite eliminar una persona según su ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Persona eliminada exitosamente
+        '404':
+          description: Persona no encontrada
+          content:
+            application/json:
+              example:
+                message: Persona no encontrada
+
+  /company:
+    get:
+      tags:
+        - customer
+      summary: Obtener lista de empresas (Company)
+      description: Retorna una lista de todas las empresas registradas.
+      responses:
+        '200':
+          description: Lista de empresas obtenida exitosamente
+          content:
+            application/json:
+              example:
+                - id: 1
+                  businessName: Empresa A
+                  ruc: 123456789
+                  email: empresaA@domain.com
+                  telephone: 987654321
+                  headlines: [Juan Perez, Maria Lopez]
+                  signatories: [Carlos Gomez, Ana Rodriguez]
+                  typeProfile: premium
+                - id: 2
+                  businessName: Empresa B
+                  ruc: 987654321
+                  email: empresaB@domain.com
+                  telephone: 123456789
+                  headlines: [Pedro Ramirez, Laura Martinez]
+                  signatories: [Elena Fernandez, Miguel Gonzales]
+                  typeProfile: standard
+
+    post:
+      tags:
+        - customer
+      summary: Crear una nueva empresa (Company)
+      description: Permite registrar una nueva empresa en el sistema.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Company'
+      responses:
+        '201':
+          description: Empresa creada exitosamente
+        '400':
+          description: Solicitud incorrecta
+          content:
+            application/json:
+              example:
+                message: Error de validación en la solicitud
+
+  /company/{id}:
+    get:
+      tags:
+        - customer
+      summary: Obtener detalles de una empresa (Company) por ID
+      description: Retorna los detalles de una empresa específica según su ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Detalles de la empresa obtenidos exitosamente
+          content:
+            application/json:
+              example:
+                id: 1
+                businessName: Empresa A
+                ruc: 123456789
+                email: empresaA@domain.com
+                telephone: 987654321
+                headlines: [Juan Perez, Maria Lopez]
+                signatories: [Carlos Gomez, Ana Rodriguez]
+                typeProfile: premium
+        '404':
+          description: Empresa no encontrada
+          content:
+            application/json:
+              example:
+                message: Empresa no encontrada
+    put:
+      tags:
+        - customer
+      summary: Actualizar una empresa (Company) existente
+      description: Permite actualizar los detalles de una empresa existente.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Company'
+      responses:
+        '200':
+          description: Empresa actualizada exitosamente
+        '400':
+          description: Solicitud incorrecta
+          content:
+            application/json:
+              example:
+                message: Error de validación en la solicitud
+        '404':
+          description: Empresa no encontrada
+          content:
+            application/json:
+              example:
+                message: Empresa no encontrada
+
+    delete:
+      tags:
+        - customer
+      summary: Eliminar una empresa (Company)
+      description: Permite eliminar una empresa según su ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Empresa eliminada exitosamente
+        '404':
+          description: Empresa no encontrada
+          content:
+            application/json:
+              example:
+                message: Empresa no encontrada
+
+  /account:
+    get:
+      tags:
+        - account
+      summary: Obtener lista de cuentas (Account)
+      description: Retorna una lista de todas las cuentas registradas.
+      responses:
+        '200':
+          description: Lista de cuentas obtenida exitosamente
+          content:
+            application/json:
+              example:
+                - id: 1
+                  customerId: 1
+                  typeAccount: savings
+                  descriptTypeAccount: Cuenta de Ahorro
+                  amount: 5000.00
+                  maintance: 0.00
+                  transaction: []
+                  operationDay: null
+                  dateAccount: '2022-01-20'
+                  numberAccount: '123-456-789'
+                  typeCustomer: individual
+                - id: 2
+                  customerId: 2
+                  typeAccount: current
+                  descriptTypeAccount: Cuenta Corriente
+                  amount: 10000.00
+                  maintance: 20.00
+                  transaction: []
+                  operationDay: null
+                  dateAccount: '2022-01-20'
+                  numberAccount: '987-654-321'
+                  typeCustomer: business
+
+    post:
+      tags:
+        - account
+      summary: Crear una nueva cuenta (Account)
+      description: Permite registrar una nueva cuenta en el sistema.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Account'
+      responses:
+        '201':
+          description: Cuenta creada exitosamente
+        '400':
+          description: Solicitud incorrecta
+          content:
+            application/json:
+              example:
+                message: Error de validación en la solicitud
+
+  /account/{id}:
+    get:
+      tags:
+        - account
+      summary: Obtener detalles de una cuenta (Account) por ID
+      description: Retorna los detalles de una cuenta específica según su ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Detalles de la cuenta obtenidos exitosamente
+          content:
+            application/json:
+              example:
+                id: 1
+                customerId: 1
+                typeAccount: savings
+                descriptTypeAccount: Cuenta de Ahorro
+                amount: 5000.00
+                maintance: 0.00
+                transaction: []
+                operationDay: null
+                dateAccount: '2022-01-20'
+                numberAccount: '123-456-789'
+                typeCustomer: individual
+        '404':
+          description: Cuenta no encontrada
+          content:
+            application/json:
+              example:
+                message: Cuenta no encontrada
+
+    put:
+      tags:
+        - account
+      summary: Actualizar una cuenta (Account) existente
+      description: Permite actualizar los detalles de una cuenta existente.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Account'
+      responses:
+        '200':
+          description: Cuenta actualizada exitosamente
+        '400':
+          description: Solicitud incorrecta
+          content:
+            application/json:
+              example:
+                message: Error de validación en la solicitud
+        '404':
+          description: Cuenta no encontrada
+          content:
+            application/json:
+              example:
+                message: Cuenta no encontrada
+
+    delete:
+      tags:
+        - account
+      summary: Eliminar una cuenta (Account)
+      description: Permite eliminar una cuenta según su ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Cuenta eliminada exitosamente
+        '404':
+          description: Cuenta no encontrada
+          content:
+            application/json:
+              example:
+                message: Cuenta no encontrada
+  /creditcard:
+    get:
+      tags:
+        - credits
+      summary: Obtener lista de tarjetas de crédito
+      description: Retorna una lista de todas las tarjetas de crédito registradas.
+      responses:
+        '200':
+          description: Lista de tarjetas de crédito obtenida exitosamente
+          content:
+            application/json:
+              example:
+                - id: 1
+                  customerId: 1
+                  typeAccount: credit
+                  descriptTypeAccount: Tarjeta de Crédito Personal
+                  creditAmount: 5000.00
+                  existingAmount: 2000.00
+                  creditDate: 2024-12-31
+                  numberCard: 1234-5678-9012-3456
+                  typeCustomer: individual
+                  cardHolderName: John Doe
+                  cardStatus: active
+                  expirationDate: 2025-12-31
+                - id: 2
+                  customerId: 2
+                  typeAccount: credit
+                  descriptTypeAccount: Tarjeta de Crédito Empresarial
+                  creditAmount: 10000.00
+                  existingAmount: 5000.00
+                  creditDate: 2024-12-31
+                  numberCard: 9876-5432-1098-7654
+                  typeCustomer: business
+                  cardHolderName: Jane Smith
+                  cardStatus: active
+                  expirationDate: 2025-12-31
+
+    post:
+      tags:
+        - credits
+      summary: Crear una nueva tarjeta de crédito
+      description: Permite registrar una nueva tarjeta de crédito en el sistema.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditCard'
+      responses:
+        '201':
+          description: Tarjeta de crédito creada exitosamente
+        '400':
+          description: Solicitud incorrecta
+          content:
+            application/json:
+              example:
+                message: Error de validación en la solicitud
+
+  /creditcard/{id}:
+    get:
+      tags:
+        - credits
+      summary: Obtener detalles de una tarjeta de crédito por ID
+      description: Retorna los detalles de una tarjeta de crédito específica según su ID.
+      parameters:
+        - name: id
+          in: path
+          description: ID único de la tarjeta de crédito
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Detalles de la tarjeta de crédito obtenidos exitosamente
+          content:
+            application/json:
+              example:
+                id: 1
+                customerId: 1
+                typeAccount: credit
+                descriptTypeAccount: Tarjeta de Crédito Personal
+                creditAmount: 5000.00
+                existingAmount: 2000.00
+                creditDate: 2024-12-31
+                numberCard: 1234-5678-9012-3456
+                typeCustomer: individual
+                cardHolderName: John Doe
+                cardStatus: active
+                expirationDate: 2025-12-31
+
+    put:
+      tags:
+        - credits
+      summary: Actualizar una tarjeta de crédito existente
+      description: Permite actualizar la información de una tarjeta de crédito existente en el sistema.
+      parameters:
+        - name: id
+          in: path
+          description: ID único de la tarjeta de crédito
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditCard'
+      responses:
+        '200':
+          description: Tarjeta de crédito actualizada exitosamente
+        '400':
+          description: Solicitud incorrecta
+          content:
+            application/json:
+              example:
+                message: Error de validación en la solicitud
+
+    delete:
+      tags:
+        - credits
+      summary: Eliminar una tarjeta de crédito
+      description: Permite eliminar una tarjeta de crédito existente del sistema.
+      parameters:
+        - name: id
+          in: path
+          description: ID único de la tarjeta de crédito
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Tarjeta de crédito eliminada exitosamente
+
+  /credit:
+    get:
+      tags:
+        - credits
+      summary: Obtener lista de créditos
+      description: Retorna una lista de todos los créditos registrados.
+      responses:
+        '200':
+          description: Lista de créditos obtenida exitosamente
+          content:
+            application/json:
+              example:
+                - id: 1
+                  customerId: 1
+                  typeAccount: credit
+                  descriptTypeAccount: Crédito Personal
+                  creditAmount: 10000.00
+                  existingAmount: 5000.00
+                  creditDate: 2024-12-31
+                  typeCustomer: individual
+                  interestRate: 0.1
+                  paymentFrequency: monthly
+                  installmentCount: 12
+                  remainingInstallments: 6
+                  nextPaymentDate: 2024-07-31
+                  status: active
+                - id: 2
+                  customerId: 2
+                  typeAccount: credit
+                  descriptTypeAccount: Crédito Empresarial
+                  creditAmount: 50000.00
+                  existingAmount: 20000.00
+                  creditDate: 2024-12-31
+                  typeCustomer: business
+                  interestRate: 0.08
+                  paymentFrequency: quarterly
+                  installmentCount: 24
+                  remainingInstallments: 12
+                  nextPaymentDate: 2024-10-31
+                  status: active
+
+    post:
+      tags:
+        - credits
+      summary: Crear un nuevo crédito
+      description: Permite registrar un nuevo crédito en el sistema.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Credit'
+      responses:
+        '201':
+          description: Crédito creado exitosamente
+        '400':
+          description: Solicitud incorrecta
+          content:
+            application/json:
+              example:
+                message: Error de validación en la solicitud
+
+  /credit/{id}:
+    get:
+      tags:
+        - credits
+      summary: Obtener detalles de un crédito por ID
+      description: Retorna los detalles de un crédito específico según su ID.
+      parameters:
+        - name: id
+          in: path
+          description: ID único del crédito
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Detalles del crédito obtenidos exitosamente
+          content:
+            application/json:
+              example:
+                id: 1
+                customerId: 1
+                typeAccount: credit
+                descriptTypeAccount: Crédito Personal
+                creditAmount: 10000.00
+                existingAmount: 5000.00
+                creditDate: 2024-12-31
+                typeCustomer: individual
+                interestRate: 0.1
+                paymentFrequency: monthly
+                installmentCount: 12
+                remainingInstallments: 6
+                nextPaymentDate: 2024-07-31
+                status: active
+
+    put:
+      tags:
+        - credits
+      summary: Actualizar un crédito existente
+      description: Permite actualizar la información de un crédito existente en el sistema.
+      parameters:
+        - name: id
+          in: path
+          description: ID único del crédito
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Credit'
+      responses:
+        '200':
+          description: Crédito actualizado exitosamente
+        '400':
+          description: Solicitud incorrecta
+          content:
+            application/json:
+              example:
+                message: Error de validación en la solicitud
+
+    delete:
+      tags:
+        - credits
+      summary: Eliminar un crédito
+      description: Permite eliminar un crédito existente del sistema.
+      parameters:
+        - name: id
+          in: path
+          description: ID único del crédito
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Crédito eliminado exitosamente
+
+  /transaction:
+    get:
+      tags:
+        - transaction
+      summary: Obtener lista de transacciones
+      description: Retorna una lista de todas las transacciones registradas.
+      responses:
+        '200':
+          description: Lista de transacciones obtenida exitosamente
+          content:
+            application/json:
+              example:
+                - id: 1
+                  productType: "CreditCard"
+                  productId: 1
+                  customerId: 1
+                  transactionType: "purchase"
+                  amount: 50.00
+                  transactionDate: "2024-01-20"
+                  customerType: "individual"
+                  balance: 450.00
+                - id: 2
+                  productType: "Credit"
+                  productId: 1
+                  customerId: 1
+                  transactionType: "payment"
+                  amount: 100.00
+                  transactionDate: "2024-01-21"
+                  customerType: "individual"
+                  balance: 2900.00
+
+    post:
+      tags:
+        - transaction
+      summary: Crear una nueva transacción
+      description: Permite registrar una nueva transacción en el sistema.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+      responses:
+        '201':
+          description: Transacción creada exitosamente
+        '400':
+          description: Solicitud incorrecta
+          content:
+            application/json:
+              example:
+                message: Error de validación en la solicitud
+
+  /transaction/{id}:
+    get:
+      tags:
+        - transaction
+      summary: Obtener detalles de una transacción por ID
+      description: Retorna los detalles de una transacción específica según su ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Detalles de la transacción obtenidos exitosamente
+          content:
+            application/json:
+              example:
+                id: 1
+                productType: "CreditCard"
+                productId: 1
+                customerId: 1
+                transactionType: "purchase"
+                amount: 50.00
+                transactionDate: "2024-01-20"
+                customerType: "individual"
+                balance: 450.00
+        '404':
+          description: Transacción no encontrada
+          content:
+            application/json:
+              example:
+                message: Transacción no encontrada
+
+    put:
+      tags:
+        - transaction
+      summary: Actualizar una transacción existente
+      description: Permite actualizar los detalles de una transacción existente.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+      responses:
+        '200':
+          description: Transacción actualizada exitosamente
+        '400':
+          description: Solicitud incorrecta
+          content:
+            application/json:
+              example:
+                message: Error de validación en la solicitud
+        '404':
+          description: Transacción no encontrada
+          content:
+            application/json:
+              example:
+                message: Transacción no encontrada
+
+    delete:
+      tags:
+        - transaction
+      summary: Eliminar una transacción
+      description: Permite eliminar una transacción según su ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Transacción eliminada exitosamente
+        '404':
+          description: Transacción no encontrada
+          content:
+            application/json:
+              example:
+                message: Transacción no encontrada
+components:
+  schemas:
+    Person:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Nombre de la persona.
+        lastName:
+          type: string
+          description: Apellido de la persona.
+        dni:
+          type: integer
+          format: int32
+          description: Número de identificación personal.
+        email:
+          type: string
+          format: email
+          pattern: ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
+          description: Dirección de correo electrónico.
+        telephone:
+          type: integer
+          format: int32
+          pattern: ^[0-9]{9,15}$
+          description: Número de teléfono.
+        typeCustomer:
+          type: string
+          enum: [individual, business]
+          description: Tipo de cliente (individual o empresarial).
+        typeProfile:
+          type: string
+          enum: [standard, premium]
+          description: Tipo de perfil (estándar o premium).
+
+      required:
+        - name
+        - lastName
+        - dni
+        - email
+        - telephone
+        - typeCustomer
+        - typeProfile
+
+    Company:
+      type: object
+      properties:
+        businessName:
+          type: string
+          description: Nombre de la empresa.
+        ruc:
+          type: integer
+          format: int64
+          description: Registro Único de Contribuyentes.
+        email:
+          type: string
+          format: email
+          pattern: ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
+          description: Dirección de correo electrónico.
+        telephone:
+          type: integer
+          format: int32
+          pattern: ^[0-9]{9,15}$
+          description: Número de teléfono.
+        headlines:
+          type: array
+          items:
+            type: string
+          description: Lista de titulares de la empresa.
+        signatories:
+          type: array
+          items:
+            type: string
+          description: Lista de firmantes autorizados.
+        typeProfile:
+          type: string
+          enum: [standard, premium]
+          description: Tipo de perfil (estándar o premium).
+
+      required:
+        - businessName
+        - ruc
+        - email
+        - telephone
+        - headlines
+        - signatories
+        - typeProfile
+
+    Account:
+      type: object
+      properties:
+        customerId:
+          type: integer
+          format: int64
+          description: ID del cliente asociado a la cuenta.
+        typeAccount:
+          type: string
+          description: Tipo de cuenta.
+        descriptTypeAccount:
+          type: string
+          description: Descripción del tipo de cuenta.
+        amount:
+          type: number
+          format: float
+          description: Monto disponible en la cuenta.
+        maintance:
+          type: number
+          format: float
+          description: Monto de mantenimiento de la cuenta.
+        transaction:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transaction'
+          description: Lista de transacciones asociadas a la cuenta.
+        operationDay:
+          type: string
+          format: date
+          description: Día de operación de la cuenta.
+        dateAccount:
+          type: string
+          format: date
+          description: Fecha de creación de la cuenta.
+        numberAccount:
+          type: string
+          description: Número de cuenta.
+        typeCustomer:
+          type: string
+          enum: [individual, business]
+          description: Tipo de cliente asociado a la cuenta.
+
+      required:
+        - customerId
+        - typeAccount
+        - descriptTypeAccount
+        - amount
+        - maintance
+        - transaction
+        - operationDay
+        - dateAccount
+        - numberAccount
+        - typeCustomer
+
+    CreditCard:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: ID único de la tarjeta de crédito.
+        customerId:
+          type: integer
+          description: ID del cliente asociado.
+        typeAccount:
+          type: string
+          description: Tipo de cuenta asociada.
+        descriptTypeAccount:
+          type: string
+          description: Descripción del tipo de cuenta.
+        creditAmount:
+          type: number
+          format: double
+          description: Límite de crédito de la tarjeta.
+        existingAmount:
+          type: number
+          format: double
+          description: Monto actual utilizado en la tarjeta.
+        creditDate:
+          type: string
+          format: date
+          description: Fecha de vencimiento del crédito.
+        numberCard:
+          type: string
+          pattern: ^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}$
+          description: Número de tarjeta de crédito.
+        typeCustomer:
+          type: string
+          enum: [individual, business]
+          description: Tipo de cliente (individual o empresarial).
+        cardStatus:
+          type: string
+          enum: [active, inactive, blocked]
+          description: Estado de la tarjeta (activo, inactivo, bloqueado).
+        expirationDate:
+          type: string
+          format: date
+          description: Fecha de caducidad de la tarjeta.
+        issuedDate:
+          type: string
+          format: date
+          description: Fecha de emisión de la tarjeta.
+        transactions:
+          type: object
+          items: 
+            $ref: '#/components/schemas/Transaction'
+          description: Lista de transacciones asociadas a la tarjeta de crédito.
+
+      required:
+        - customerId
+        - typeAccount
+        - descriptTypeAccount
+        - creditAmount
+        - existingAmount
+        - creditDate
+        - numberCard
+        - typeCustomer
+        - expirationDate
+        - issuedDate
+    
+ 
+    Credit:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: ID único del crédito.
+        customerId:
+          type: integer
+          description: ID del cliente asociado.
+        typeAccount:
+          type: string
+          description: Tipo de cuenta asociada.
+        descriptTypeAccount:
+          type: string
+          description: Descripción del tipo de cuenta.
+        creditAmount:
+          type: number
+          format: double
+          description: Monto total del crédito.
+        existingAmount:
+          type: number
+          format: double
+          description: Monto actual del crédito.
+        creditDate:
+          type: string
+          format: date
+          description: Fecha de vencimiento del crédito.
+        typeCustomer:
+          type: string
+          enum: [individual, business]
+          description: Tipo de cliente (individual o empresarial).
+        interestRate:
+          type: number
+          format: double
+          description: Tasa de interés aplicada al crédito.
+        paymentFrequency:
+          type: string
+          enum: [monthly, quarterly, annually]
+          description: Frecuencia de pago (mensual, trimestral, anual).
+        installmentCount:
+          type: integer
+          description: Número total de cuotas del crédito.
+        remainingInstallments:
+          type: integer
+          description: Número de cuotas restantes.
+        nextPaymentDate:
+          type: string
+          format: date
+          description: Próxima fecha de pago.
+        status:
+          type: string
+          enum: [active, closed, overdue]
+          description: Estado del crédito (activo, cerrado, vencido).
+
+      required:
+        - customerId
+        - typeAccount
+        - descriptTypeAccount
+        - creditAmount
+        - existingAmount
+        - creditDate
+        - typeCustomer
+        - interestRate
+        - paymentFrequency
+        - installmentCount
+        - remainingInstallments
+        - nextPaymentDate
+        - status
+
+    Transaction:
+      type: object
+      properties:
+        productType:
+          type: string
+          description: Tipo de producto asociado a la transacción.
+        productId:
+          type: integer
+          format: int64
+          description: ID del producto asociado a la transacción.
+        customerId:
+          type: integer
+          format: int64
+          description: ID del cliente asociado a la transacción.
+        transactionType:
+          type: string
+          description: Tipo de transacción.
+        amount:
+          type: number
+          format: float
+          description: Monto de la transacción.
+        transactionDate:
+          type: string
+          format: date
+          description: Fecha de la transacción.
+        customerType:
+          type: string
+          enum: [individual, business]
+          description: Tipo de cliente asociado a la transacción.
+        balance:
+          type: number
+          format: float
+          description: Saldo después de la transacción.
+
+      required:
+        - productType
+        - productId
+        - customerId
+        - transactionType
+        - amount
+        - transactionDate
+        - customerType
+        - balance
+          
+          
+          
+          
