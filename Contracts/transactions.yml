@@ -1,0 +1,212 @@
+openapi: 3.0.3
+info:
+  title: Transaccions Microservice
+  description: El proyecto gestiona información transacciones.
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: anacarenasr@sgmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Servidor de desarrollo
+tags:
+  - name: transaction
+    description: Operaciones relacionadas con transacciones
+
+paths:
+  /transaction:
+    get:
+      tags:
+        - transaction
+      summary: Obtener lista de transacciones
+      description: Retorna una lista de todas las transacciones registradas.
+      responses:
+        '200':
+          description: Lista de transacciones obtenida exitosamente
+          content:
+            application/json:
+              example:
+                - id: 1
+                  productType: "CreditCard"
+                  productId: 1
+                  customerId: 1
+                  transactionType: "purchase"
+                  amount: 50.00
+                  transactionDate: "2024-01-20"
+                  customerType: "individual"
+                  balance: 450.00
+                - id: 2
+                  productType: "Credit"
+                  productId: 1
+                  customerId: 1
+                  transactionType: "payment"
+                  amount: 100.00
+                  transactionDate: "2024-01-21"
+                  customerType: "individual"
+                  balance: 2900.00
+
+    post:
+      tags:
+        - transaction
+      summary: Crear una nueva transacción
+      description: Permite registrar una nueva transacción en el sistema.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+      responses:
+        '201':
+          description: Transacción creada exitosamente
+        '400':
+          description: Solicitud incorrecta
+          content:
+            application/json:
+              example:
+                message: Error de validación en la solicitud
+
+  /transaction/{id}:
+    get:
+      tags:
+        - transaction
+      summary: Obtener detalles de una transacción por ID
+      description: Retorna los detalles de una transacción específica según su ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Detalles de la transacción obtenidos exitosamente
+          content:
+            application/json:
+              example:
+                id: 1
+                productType: "CreditCard"
+                productId: 1
+                customerId: 1
+                transactionType: "purchase"
+                amount: 50.00
+                transactionDate: "2024-01-20"
+                customerType: "individual"
+                balance: 450.00
+        '404':
+          description: Transacción no encontrada
+          content:
+            application/json:
+              example:
+                message: Transacción no encontrada
+
+    put:
+      tags:
+        - transaction
+      summary: Actualizar una transacción existente
+      description: Permite actualizar los detalles de una transacción existente.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+      responses:
+        '200':
+          description: Transacción actualizada exitosamente
+        '400':
+          description: Solicitud incorrecta
+          content:
+            application/json:
+              example:
+                message: Error de validación en la solicitud
+        '404':
+          description: Transacción no encontrada
+          content:
+            application/json:
+              example:
+                message: Transacción no encontrada
+
+    delete:
+      tags:
+        - transaction
+      summary: Eliminar una transacción
+      description: Permite eliminar una transacción según su ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Transacción eliminada exitosamente
+        '404':
+          description: Transacción no encontrada
+          content:
+            application/json:
+              example:
+                message: Transacción no encontrada
+components:
+  schemas:
+    Transaction:
+      type: object
+      properties:
+        productType:
+          type: string
+          description: Tipo de producto asociado a la transacción.
+        productId:
+          type: integer
+          format: int64
+          description: ID del producto asociado a la transacción.
+        customerId:
+          type: integer
+          format: int64
+          description: ID del cliente asociado a la transacción.
+        transactionType:
+          type: string
+          description: Tipo de transacción.
+        amount:
+          type: number
+          format: float
+          description: Monto de la transacción.
+        transactionDate:
+          type: string
+          format: date
+          description: Fecha de la transacción.
+        customerType:
+          type: string
+          enum: [individual, business]
+          description: Tipo de cliente asociado a la transacción.
+        balance:
+          type: number
+          format: float
+          description: Saldo después de la transacción.
+
+      required:
+        - productType
+        - productId
+        - customerId
+        - transactionType
+        - amount
+        - transactionDate
+        - customerType
+        - balance
+
+
+

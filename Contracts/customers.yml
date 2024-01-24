@@ -1,0 +1,383 @@
+openapi: 3.0.3
+info:
+  title: Customers Microservice
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: anacarenasr@sgmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Servidor de desarrollo
+tags:
+  - name: customer
+    description: Operaciones relacionadas con clientes
+paths:
+  /person:
+    get:
+      tags:
+        - customer
+      summary: Obtener lista de personas (Person)
+      description: Retorna una lista de todas las personas registradas.
+      responses:
+        '200':
+          description: Lista de personas obtenida exitosamente
+          content:
+            application/json:
+              example:
+                - id: 1
+                  name: Juan
+                  lastName: Perez
+                  dni: 123456789
+                  email: juan@domain.com
+                  telephone: 123456789
+                  typeCustomer: individual
+                  typeProfile: standard
+                - id: 2
+                  name: Maria
+                  lastName: Lopez
+                  dni: 987654321
+                  email: maria@domain.com
+                  telephone: 987654321
+                  typeCustomer: individual
+                  typeProfile: premium
+    post:
+      tags:
+        - customer
+      summary: Crear una nueva persona (Person)
+      description: Permite registrar una nueva persona en el sistema.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Person'
+      responses:
+        '201':
+          description: Persona creada exitosamente
+        '400':
+          description: Solicitud incorrecta
+          content:
+            application/json:
+              example:
+                message: Error de validación en la solicitud
+
+  /person/{id}:
+    get:
+      tags:
+        - customer
+      summary: Obtener detalles de una persona (Person) por ID
+      description: Retorna los detalles de una persona específica según su ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Detalles de la persona obtenidos exitosamente
+          content:
+            application/json:
+              example:
+                id: 1
+                name: Juan
+                lastName: Perez
+                dni: 123456789
+                email: juan@domain.com
+                telephone: 123456789
+                typeCustomer: individual
+                typeProfile: standard
+        '404':
+          description: Persona no encontrada
+          content:
+            application/json:
+              example:
+                message: Persona no encontrada
+
+    put:
+      tags:
+        - customer
+      summary: Actualizar una persona (Person) existente
+      description: Permite actualizar los detalles de una persona existente.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Person'
+      responses:
+        '200':
+          description: Persona actualizada exitosamente
+        '400':
+          description: Solicitud incorrecta
+          content:
+            application/json:
+              example:
+                message: Error de validación en la solicitud
+        '404':
+          description: Persona no encontrada
+          content:
+            application/json:
+              example:
+                message: Persona no encontrada
+
+    delete:
+      tags:
+        - customer
+      summary: Eliminar una persona (Person)
+      description: Permite eliminar una persona según su ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Persona eliminada exitosamente
+        '404':
+          description: Persona no encontrada
+          content:
+            application/json:
+              example:
+                message: Persona no encontrada
+
+  /company:
+    get:
+      tags:
+        - customer
+      summary: Obtener lista de empresas (Company)
+      description: Retorna una lista de todas las empresas registradas.
+      responses:
+        '200':
+          description: Lista de empresas obtenida exitosamente
+          content:
+            application/json:
+              example:
+                - id: 1
+                  businessName: Empresa A
+                  ruc: 123456789
+                  email: empresaA@domain.com
+                  telephone: 987654321
+                  headlines: [Juan Perez, Maria Lopez]
+                  signatories: [Carlos Gomez, Ana Rodriguez]
+                  typeProfile: premium
+                - id: 2
+                  businessName: Empresa B
+                  ruc: 987654321
+                  email: empresaB@domain.com
+                  telephone: 123456789
+                  headlines: [Pedro Ramirez, Laura Martinez]
+                  signatories: [Elena Fernandez, Miguel Gonzales]
+                  typeProfile: standard
+
+    post:
+      tags:
+        - customer
+      summary: Crear una nueva empresa (Company)
+      description: Permite registrar una nueva empresa en el sistema.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Company'
+      responses:
+        '201':
+          description: Empresa creada exitosamente
+        '400':
+          description: Solicitud incorrecta
+          content:
+            application/json:
+              example:
+                message: Error de validación en la solicitud
+
+  /company/{id}:
+    get:
+      tags:
+        - customer
+      summary: Obtener detalles de una empresa (Company) por ID
+      description: Retorna los detalles de una empresa específica según su ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Detalles de la empresa obtenidos exitosamente
+          content:
+            application/json:
+              example:
+                id: 1
+                businessName: Empresa A
+                ruc: 123456789
+                email: empresaA@domain.com
+                telephone: 987654321
+                headlines: [Juan Perez, Maria Lopez]
+                signatories: [Carlos Gomez, Ana Rodriguez]
+                typeProfile: premium
+        '404':
+          description: Empresa no encontrada
+          content:
+            application/json:
+              example:
+                message: Empresa no encontrada
+    put:
+      tags:
+        - customer
+      summary: Actualizar una empresa (Company) existente
+      description: Permite actualizar los detalles de una empresa existente.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Company'
+      responses:
+        '200':
+          description: Empresa actualizada exitosamente
+        '400':
+          description: Solicitud incorrecta
+          content:
+            application/json:
+              example:
+                message: Error de validación en la solicitud
+        '404':
+          description: Empresa no encontrada
+          content:
+            application/json:
+              example:
+                message: Empresa no encontrada
+
+    delete:
+      tags:
+        - customer
+      summary: Eliminar una empresa (Company)
+      description: Permite eliminar una empresa según su ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Empresa eliminada exitosamente
+        '404':
+          description: Empresa no encontrada
+          content:
+            application/json:
+              example:
+                message: Empresa no encontrada
+components:
+  schemas:
+    Person:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Nombre de la persona.
+        lastName:
+          type: string
+          description: Apellido de la persona.
+        dni:
+          type: integer
+          format: int32
+          description: Número de identificación personal.
+        email:
+          type: string
+          format: email
+          pattern: ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
+          description: Dirección de correo electrónico.
+        telephone:
+          type: integer
+          format: int32
+          pattern: ^[0-9]{9,15}$
+          description: Número de teléfono.
+        typeCustomer:
+          type: string
+          enum: [individual, business]
+          description: Tipo de cliente (individual o empresarial).
+        typeProfile:
+          type: string
+          enum: [standard, premium]
+          description: Tipo de perfil (estándar o premium).
+
+      required:
+        - name
+        - lastName
+        - dni
+        - email
+        - telephone
+        - typeCustomer
+        - typeProfile
+
+    Company:
+      type: object
+      properties:
+        businessName:
+          type: string
+          description: Nombre de la empresa.
+        ruc:
+          type: integer
+          format: int64
+          description: Registro Único de Contribuyentes.
+        email:
+          type: string
+          format: email
+          pattern: ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
+          description: Dirección de correo electrónico.
+        telephone:
+          type: integer
+          format: int32
+          pattern: ^[0-9]{9,15}$
+          description: Número de teléfono.
+        headlines:
+          type: array
+          items:
+            type: string
+          description: Lista de titulares de la empresa.
+        signatories:
+          type: array
+          items:
+            type: string
+          description: Lista de firmantes autorizados.
+        typeProfile:
+          type: string
+          enum: [standard, premium]
+          description: Tipo de perfil (estándar o premium).
+
+      required:
+        - businessName
+        - ruc
+        - email
+        - telephone
+        - headlines
+        - signatories
+        - typeProfile

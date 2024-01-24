@@ -1,0 +1,440 @@
+openapi: 3.0.3
+info:
+  title: Credits Microservice
+  description: El proyecto gestiona información y operaciones relacionada a Creditos y tarjetas.
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: anacarenasr@sgmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Servidor de desarrollo
+tags:
+  - name: credits
+    description: Operaciones relacionadas con créditos (Credit y CreditCard).
+
+paths:
+  /creditcard:
+    get:
+      tags:
+        - credits
+      summary: Obtener lista de tarjetas de crédito
+      description: Retorna una lista de todas las tarjetas de crédito registradas.
+      responses:
+        '200':
+          description: Lista de tarjetas de crédito obtenida exitosamente
+          content:
+            application/json:
+              example:
+                - id: 1
+                  customerId: 1
+                  typeAccount: credit
+                  descriptTypeAccount: Tarjeta de Crédito Personal
+                  creditAmount: 5000.00
+                  existingAmount: 2000.00
+                  creditDate: 2024-12-31
+                  numberCard: 1234-5678-9012-3456
+                  typeCustomer: individual
+                  cardHolderName: John Doe
+                  cardStatus: active
+                  expirationDate: 2025-12-31
+                - id: 2
+                  customerId: 2
+                  typeAccount: credit
+                  descriptTypeAccount: Tarjeta de Crédito Empresarial
+                  creditAmount: 10000.00
+                  existingAmount: 5000.00
+                  creditDate: 2024-12-31
+                  numberCard: 9876-5432-1098-7654
+                  typeCustomer: business
+                  cardHolderName: Jane Smith
+                  cardStatus: active
+                  expirationDate: 2025-12-31
+
+    post:
+      tags:
+        - credits
+      summary: Crear una nueva tarjeta de crédito
+      description: Permite registrar una nueva tarjeta de crédito en el sistema.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditCard'
+      responses:
+        '201':
+          description: Tarjeta de crédito creada exitosamente
+        '400':
+          description: Solicitud incorrecta
+          content:
+            application/json:
+              example:
+                message: Error de validación en la solicitud
+
+  /creditcard/{id}:
+    get:
+      tags:
+        - credits
+      summary: Obtener detalles de una tarjeta de crédito por ID
+      description: Retorna los detalles de una tarjeta de crédito específica según su ID.
+      parameters:
+        - name: id
+          in: path
+          description: ID único de la tarjeta de crédito
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Detalles de la tarjeta de crédito obtenidos exitosamente
+          content:
+            application/json:
+              example:
+                id: 1
+                customerId: 1
+                typeAccount: credit
+                descriptTypeAccount: Tarjeta de Crédito Personal
+                creditAmount: 5000.00
+                existingAmount: 2000.00
+                creditDate: 2024-12-31
+                numberCard: 1234-5678-9012-3456
+                typeCustomer: individual
+                cardHolderName: John Doe
+                cardStatus: active
+                expirationDate: 2025-12-31
+
+    put:
+      tags:
+        - credits
+      summary: Actualizar una tarjeta de crédito existente
+      description: Permite actualizar la información de una tarjeta de crédito existente en el sistema.
+      parameters:
+        - name: id
+          in: path
+          description: ID único de la tarjeta de crédito
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditCard'
+      responses:
+        '200':
+          description: Tarjeta de crédito actualizada exitosamente
+        '400':
+          description: Solicitud incorrecta
+          content:
+            application/json:
+              example:
+                message: Error de validación en la solicitud
+
+    delete:
+      tags:
+        - credits
+      summary: Eliminar una tarjeta de crédito
+      description: Permite eliminar una tarjeta de crédito existente del sistema.
+      parameters:
+        - name: id
+          in: path
+          description: ID único de la tarjeta de crédito
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Tarjeta de crédito eliminada exitosamente
+
+  /credit:
+    get:
+      tags:
+        - credits
+      summary: Obtener lista de créditos
+      description: Retorna una lista de todos los créditos registrados.
+      responses:
+        '200':
+          description: Lista de créditos obtenida exitosamente
+          content:
+            application/json:
+              example:
+                - id: 1
+                  customerId: 1
+                  typeAccount: credit
+                  descriptTypeAccount: Crédito Personal
+                  creditAmount: 10000.00
+                  existingAmount: 5000.00
+                  creditDate: 2024-12-31
+                  typeCustomer: individual
+                  interestRate: 0.1
+                  paymentFrequency: monthly
+                  installmentCount: 12
+                  remainingInstallments: 6
+                  nextPaymentDate: 2024-07-31
+                  status: active
+                - id: 2
+                  customerId: 2
+                  typeAccount: credit
+                  descriptTypeAccount: Crédito Empresarial
+                  creditAmount: 50000.00
+                  existingAmount: 20000.00
+                  creditDate: 2024-12-31
+                  typeCustomer: business
+                  interestRate: 0.08
+                  paymentFrequency: quarterly
+                  installmentCount: 24
+                  remainingInstallments: 12
+                  nextPaymentDate: 2024-10-31
+                  status: active
+
+    post:
+      tags:
+        - credits
+      summary: Crear un nuevo crédito
+      description: Permite registrar un nuevo crédito en el sistema.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Credit'
+      responses:
+        '201':
+          description: Crédito creado exitosamente
+        '400':
+          description: Solicitud incorrecta
+          content:
+            application/json:
+              example:
+                message: Error de validación en la solicitud
+
+  /credit/{id}:
+    get:
+      tags:
+        - credits
+      summary: Obtener detalles de un crédito por ID
+      description: Retorna los detalles de un crédito específico según su ID.
+      parameters:
+        - name: id
+          in: path
+          description: ID único del crédito
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Detalles del crédito obtenidos exitosamente
+          content:
+            application/json:
+              example:
+                id: 1
+                customerId: 1
+                typeAccount: credit
+                descriptTypeAccount: Crédito Personal
+                creditAmount: 10000.00
+                existingAmount: 5000.00
+                creditDate: 2024-12-31
+                typeCustomer: individual
+                interestRate: 0.1
+                paymentFrequency: monthly
+                installmentCount: 12
+                remainingInstallments: 6
+                nextPaymentDate: 2024-07-31
+                status: active
+
+    put:
+      tags:
+        - credits
+      summary: Actualizar un crédito existente
+      description: Permite actualizar la información de un crédito existente en el sistema.
+      parameters:
+        - name: id
+          in: path
+          description: ID único del crédito
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Credit'
+      responses:
+        '200':
+          description: Crédito actualizado exitosamente
+        '400':
+          description: Solicitud incorrecta
+          content:
+            application/json:
+              example:
+                message: Error de validación en la solicitud
+
+    delete:
+      tags:
+        - credits
+      summary: Eliminar un crédito
+      description: Permite eliminar un crédito existente del sistema.
+      parameters:
+        - name: id
+          in: path
+          description: ID único del crédito
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Crédito eliminado exitosamente
+
+components:
+  schemas:
+    CreditCard:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: ID único de la tarjeta de crédito.
+        customerId:
+          type: integer
+          description: ID del cliente asociado.
+        typeAccount:
+          type: string
+          description: Tipo de cuenta asociada.
+        descriptTypeAccount:
+          type: string
+          description: Descripción del tipo de cuenta.
+        creditAmount:
+          type: number
+          format: double
+          description: Límite de crédito de la tarjeta.
+        existingAmount:
+          type: number
+          format: double
+          description: Monto actual utilizado en la tarjeta.
+        creditDate:
+          type: string
+          format: date
+          description: Fecha de vencimiento del crédito.
+        numberCard:
+          type: string
+          pattern: ^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}$
+          description: Número de tarjeta de crédito.
+        typeCustomer:
+          type: string
+          enum: [individual, business]
+          description: Tipo de cliente (individual o empresarial).
+        cardStatus:
+          type: string
+          enum: [active, inactive, blocked]
+          description: Estado de la tarjeta (activo, inactivo, bloqueado).
+        expirationDate:
+          type: string
+          format: date
+          description: Fecha de caducidad de la tarjeta.
+        issuedDate:
+          type: string
+          format: date
+          description: Fecha de emisión de la tarjeta.
+        transactions:
+          type: object
+          items:
+            $ref: '#/components/schemas/Transaction'
+          description: Lista de transacciones asociadas a la tarjeta de crédito.
+
+      required:
+        - customerId
+        - typeAccount
+        - descriptTypeAccount
+        - creditAmount
+        - existingAmount
+        - creditDate
+        - numberCard
+        - typeCustomer
+        - expirationDate
+        - issuedDate
+
+
+    Credit:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: ID único del crédito.
+        customerId:
+          type: integer
+          description: ID del cliente asociado.
+        typeAccount:
+          type: string
+          description: Tipo de cuenta asociada.
+        descriptTypeAccount:
+          type: string
+          description: Descripción del tipo de cuenta.
+        creditAmount:
+          type: number
+          format: double
+          description: Monto total del crédito.
+        existingAmount:
+          type: number
+          format: double
+          description: Monto actual del crédito.
+        creditDate:
+          type: string
+          format: date
+          description: Fecha de vencimiento del crédito.
+        typeCustomer:
+          type: string
+          enum: [individual, business]
+          description: Tipo de cliente (individual o empresarial).
+        interestRate:
+          type: number
+          format: double
+          description: Tasa de interés aplicada al crédito.
+        paymentFrequency:
+          type: string
+          enum: [monthly, quarterly, annually]
+          description: Frecuencia de pago (mensual, trimestral, anual).
+        installmentCount:
+          type: integer
+          description: Número total de cuotas del crédito.
+        remainingInstallments:
+          type: integer
+          description: Número de cuotas restantes.
+        nextPaymentDate:
+          type: string
+          format: date
+          description: Próxima fecha de pago.
+        status:
+          type: string
+          enum: [active, closed, overdue]
+          description: Estado del crédito (activo, cerrado, vencido).
+
+      required:
+        - customerId
+        - typeAccount
+        - descriptTypeAccount
+        - creditAmount
+        - existingAmount
+        - creditDate
+        - typeCustomer
+        - interestRate
+        - paymentFrequency
+        - installmentCount
+        - remainingInstallments
+        - nextPaymentDate
+        - status
