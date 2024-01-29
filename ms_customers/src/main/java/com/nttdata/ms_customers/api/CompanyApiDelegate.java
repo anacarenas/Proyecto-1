@@ -28,7 +28,7 @@ public interface CompanyApiDelegate {
      * @return Lista de empresas obtenida exitosamente (status code 200)
      * @see CompanyApi#companyGet
      */
-    default Mono<ResponseEntity<Void>> companyGet(ServerWebExchange exchange) {
+    default Mono<ResponseEntity<?>> companyGet(ServerWebExchange exchange) {
         Mono<Void> result = Mono.empty();
         exchange.getResponse().setStatusCode(HttpStatus.NOT_IMPLEMENTED);
         return result.then(Mono.empty());
@@ -44,7 +44,7 @@ public interface CompanyApiDelegate {
      *         or Empresa no encontrada (status code 404)
      * @see CompanyApi#companyIdDelete
      */
-    default Mono<ResponseEntity<Void>> companyIdDelete(Long id,
+    default Mono<ResponseEntity<Object>> companyIdDelete(Long id,
         ServerWebExchange exchange) {
         Mono<Void> result = Mono.empty();
         exchange.getResponse().setStatusCode(HttpStatus.NOT_IMPLEMENTED);
@@ -61,7 +61,7 @@ public interface CompanyApiDelegate {
      *         or Empresa no encontrada (status code 404)
      * @see CompanyApi#companyIdGet
      */
-    default Mono<ResponseEntity<Void>> companyIdGet(Long id,
+    default Mono<ResponseEntity<Object>> companyIdGet(Long id,
         ServerWebExchange exchange) {
         Mono<Void> result = Mono.empty();
         exchange.getResponse().setStatusCode(HttpStatus.NOT_IMPLEMENTED);
@@ -80,7 +80,7 @@ public interface CompanyApiDelegate {
      *         or Empresa no encontrada (status code 404)
      * @see CompanyApi#companyIdPut
      */
-    default Mono<ResponseEntity<Void>> companyIdPut(Long id,
+    default Mono<ResponseEntity<Object>> companyIdPut(Long id,
         Mono<Company> company,
         ServerWebExchange exchange) {
         Mono<Void> result = Mono.empty();

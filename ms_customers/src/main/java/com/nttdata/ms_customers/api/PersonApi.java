@@ -53,7 +53,7 @@ public interface PersonApi {
         value = "/person",
         produces = { "application/json" }
     )
-    default Mono<ResponseEntity<Void>> personGet(
+    default Mono<ResponseEntity<?>> personGet(
         @Parameter(hidden = true) final ServerWebExchange exchange
     ) {
         return getDelegate().personGet(exchange);
@@ -83,7 +83,7 @@ public interface PersonApi {
         value = "/person/{id}",
         produces = { "application/json" }
     )
-    default Mono<ResponseEntity<Void>> personIdDelete(
+    default Mono<ResponseEntity<Object>> personIdDelete(
         @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id,
         @Parameter(hidden = true) final ServerWebExchange exchange
     ) {
@@ -114,7 +114,7 @@ public interface PersonApi {
         value = "/person/{id}",
         produces = { "application/json" }
     )
-    default Mono<ResponseEntity<Void>> personIdGet(
+    default Mono<ResponseEntity<Object>> personIdGet(
         @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id,
         @Parameter(hidden = true) final ServerWebExchange exchange
     ) {
@@ -149,7 +149,7 @@ public interface PersonApi {
         produces = { "application/json" },
         consumes = { "application/json" }
     )
-    default Mono<ResponseEntity<Void>> personIdPut(
+    default Mono<ResponseEntity<Object>> personIdPut(
         @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id,
         @Parameter(name = "Person", description = "", required = true) @Valid @RequestBody Mono<Person> person,
         @Parameter(hidden = true) final ServerWebExchange exchange

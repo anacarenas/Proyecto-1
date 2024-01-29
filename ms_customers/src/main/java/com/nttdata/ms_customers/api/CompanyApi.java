@@ -53,7 +53,7 @@ public interface CompanyApi {
         value = "/company",
         produces = { "application/json" }
     )
-    default Mono<ResponseEntity<Void>> companyGet(
+    default Mono<ResponseEntity<?>> companyGet(
         @Parameter(hidden = true) final ServerWebExchange exchange
     ) {
         return getDelegate().companyGet(exchange);
@@ -83,7 +83,7 @@ public interface CompanyApi {
         value = "/company/{id}",
         produces = { "application/json" }
     )
-    default Mono<ResponseEntity<Void>> companyIdDelete(
+    default Mono<ResponseEntity<Object>> companyIdDelete(
         @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id,
         @Parameter(hidden = true) final ServerWebExchange exchange
     ) {
@@ -114,7 +114,7 @@ public interface CompanyApi {
         value = "/company/{id}",
         produces = { "application/json" }
     )
-    default Mono<ResponseEntity<Void>> companyIdGet(
+    default Mono<ResponseEntity<Object>> companyIdGet(
         @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id,
         @Parameter(hidden = true) final ServerWebExchange exchange
     ) {
@@ -149,7 +149,7 @@ public interface CompanyApi {
         produces = { "application/json" },
         consumes = { "application/json" }
     )
-    default Mono<ResponseEntity<Void>> companyIdPut(
+    default Mono<ResponseEntity<Object>> companyIdPut(
         @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id,
         @Parameter(name = "Company", description = "", required = true) @Valid @RequestBody Mono<Company> company,
         @Parameter(hidden = true) final ServerWebExchange exchange

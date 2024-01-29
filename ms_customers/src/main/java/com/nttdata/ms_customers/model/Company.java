@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.data.annotation.Id;
 
 import javax.annotation.Generated;
 import javax.validation.Valid;
@@ -19,20 +20,15 @@ import java.util.Objects;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-01-23T20:04:37.520989500-05:00[America/Bogota]")
 public class Company implements Serializable {
-
   private static final long serialVersionUID = 1L;
-
+  @Id
+  private Long id;
   private String companyName;
-
   private Long ruc;
-
   private String email;
-
   private Integer telephone;
-
   @Valid
   private List<String> headlines = new ArrayList<>();
-
   @Valid
   private List<String> signatories = new ArrayList<>();
 
@@ -40,35 +36,9 @@ public class Company implements Serializable {
    * Tipo de perfil (estándar o premium).
    */
   public enum TypeProfileEnum {
-    STANDARD("standard"),
-    
-    PREMIUM("premium");
+    STARTUP,
+    CORPORATE
 
-    private String value;
-
-    TypeProfileEnum(String value) {
-      this.value = value;
-    }
-
-    @JsonValue
-    public String getValue() {
-      return value;
-    }
-
-    @Override
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static TypeProfileEnum fromValue(String value) {
-      for (TypeProfileEnum b : TypeProfileEnum.values()) {
-        if (b.value.equals(value)) {
-          return b;
-        }
-      }
-      throw new IllegalArgumentException("Unexpected value '" + value + "'");
-    }
   }
 
   private TypeProfileEnum typeProfile;

@@ -28,7 +28,7 @@ public interface PersonApiDelegate {
      * @return Lista de personas obtenida exitosamente (status code 200)
      * @see PersonApi#personGet
      */
-    default Mono<ResponseEntity<Void>> personGet(ServerWebExchange exchange) {
+    default Mono<ResponseEntity<?>> personGet(ServerWebExchange exchange) {
         Mono<Void> result = Mono.empty();
         exchange.getResponse().setStatusCode(HttpStatus.NOT_IMPLEMENTED);
         return result.then(Mono.empty());
@@ -44,7 +44,7 @@ public interface PersonApiDelegate {
      *         or Persona no encontrada (status code 404)
      * @see PersonApi#personIdDelete
      */
-    default Mono<ResponseEntity<Void>> personIdDelete(Long id,
+    default Mono<ResponseEntity<Object>> personIdDelete(Long id,
         ServerWebExchange exchange) {
         Mono<Void> result = Mono.empty();
         exchange.getResponse().setStatusCode(HttpStatus.NOT_IMPLEMENTED);
@@ -61,7 +61,7 @@ public interface PersonApiDelegate {
      *         or Persona no encontrada (status code 404)
      * @see PersonApi#personIdGet
      */
-    default Mono<ResponseEntity<Void>> personIdGet(Long id,
+    default Mono<ResponseEntity<Object>> personIdGet(Long id,
         ServerWebExchange exchange) {
         Mono<Void> result = Mono.empty();
         exchange.getResponse().setStatusCode(HttpStatus.NOT_IMPLEMENTED);
@@ -80,7 +80,7 @@ public interface PersonApiDelegate {
      *         or Persona no encontrada (status code 404)
      * @see PersonApi#personIdPut
      */
-    default Mono<ResponseEntity<Void>> personIdPut(Long id,
+    default Mono<ResponseEntity<Object>> personIdPut(Long id,
         Mono<Person> person,
         ServerWebExchange exchange) {
         Mono<Void> result = Mono.empty();

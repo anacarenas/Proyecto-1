@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.annotation.Id;
 
 import javax.annotation.Generated;
 import javax.validation.constraints.*;
@@ -15,53 +18,25 @@ import java.util.Objects;
  */
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-01-23T20:04:37.520989500-05:00[America/Bogota]")
+@Data
+@Document("person")
 public class Person implements Serializable {
-
   private static final long serialVersionUID = 1L;
-
+  @Id
+  private Long id;
   private String name;
-
   private String lastName;
-
   private Integer dni;
-
   private String email;
-
   private Integer telephone;
 
   /**
    * Tipo de cliente (individual o empresarial).
    */
   public enum TypeCustomerEnum {
-    INDIVIDUAL("individual"),
-    
-    BUSINESS("business");
+    PERSONAL,
+    BUSINESS
 
-    private String value;
-
-    TypeCustomerEnum(String value) {
-      this.value = value;
-    }
-
-    @JsonValue
-    public String getValue() {
-      return value;
-    }
-
-    @Override
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static TypeCustomerEnum fromValue(String value) {
-      for (TypeCustomerEnum b : TypeCustomerEnum.values()) {
-        if (b.value.equals(value)) {
-          return b;
-        }
-      }
-      throw new IllegalArgumentException("Unexpected value '" + value + "'");
-    }
   }
 
   private TypeCustomerEnum typeCustomer;
@@ -70,35 +45,10 @@ public class Person implements Serializable {
    * Tipo de perfil (estándar o premium).
    */
   public enum TypeProfileEnum {
-    STANDARD("standard"),
-    
-    PREMIUM("premium");
+    GOLD,
+    PREMIUM,
+    VIP
 
-    private String value;
-
-    TypeProfileEnum(String value) {
-      this.value = value;
-    }
-
-    @JsonValue
-    public String getValue() {
-      return value;
-    }
-
-    @Override
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static TypeProfileEnum fromValue(String value) {
-      for (TypeProfileEnum b : TypeProfileEnum.values()) {
-        if (b.value.equals(value)) {
-          return b;
-        }
-      }
-      throw new IllegalArgumentException("Unexpected value '" + value + "'");
-    }
   }
 
   private TypeProfileEnum typeProfile;
